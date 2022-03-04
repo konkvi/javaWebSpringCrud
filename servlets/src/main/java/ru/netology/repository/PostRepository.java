@@ -34,7 +34,7 @@ public class PostRepository {
 
   public Optional<Post> removeById(long id) {
     if (posts.containsKey(id)) {
-      return Optional.of(posts.remove(id));
+      posts.remove(id);
     }
     return Optional.empty();
   }
