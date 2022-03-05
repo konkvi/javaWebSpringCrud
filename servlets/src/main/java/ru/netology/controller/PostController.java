@@ -24,10 +24,9 @@ public class PostController {
   }
 
   public void getById(long id, HttpServletResponse response) throws IOException {
-    // TODO: deserialize request & serialize response
     response.setContentType(APPLICATION_JSON);
-    final var gson = new Gson();
     final var data = service.getById(id);
+    final var gson = new Gson();
     response.getWriter().print(gson.toJson(data));
   }
 
@@ -40,7 +39,6 @@ public class PostController {
   }
 
   public void removeById(long id, HttpServletResponse response) {
-    // TODO: deserialize request & serialize response
     response.setContentType(APPLICATION_JSON);
     service.removeById(id);
   }

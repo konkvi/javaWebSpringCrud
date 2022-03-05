@@ -5,38 +5,40 @@ import ru.netology.model.Post;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class PostRepository {
-  private ConcurrentMap<Long, Post> posts = new ConcurrentHashMap<>();
-  private final AtomicLong count = new AtomicLong(0L);
+  private ConcurrentMap<Long, Post> posts;
 
-  public List<Post> all() {
-    return new ArrayList<>(posts.values());
+  public PostRepository() {
+    this.posts = new ConcurrentHashMap<>();
+  }
+
+  public ConcurrentMap<Long, Post> all() {
+    return posts;
   }
 
   public Optional<Post> getById(long id) {
-    if (posts.containsKey(id)) {
-      return Optional.of(posts.get(id));
-    }
-    return Optional.empty();
+    return Optional.ofNullable(posts.get(id));
   }
 
   public Post save(Post post) {
-    if (post.getId() <= count.get() && post.getId() != 0) {
-      posts.put(post.getId(), post);
+    long postId = post.getId();
+    Post newPost = new Post(postId, post.getContent());
+    if (posts.containsKey(postId)){
+      replacePost(postId, post);
     } else {
-      post.setId(count.incrementAndGet());
-      posts.put(post.getId(), post);
+      posts.put(postId, newPost);
+      postId++;
     }
-    return post;
+    return newPost;
+  }
+
+  // если такой id уже существует
+  public void replacePost (long id, Post post) {
+    posts.replace(id, post);
   }
 
   public Optional<Post> removeById(long id) {
-    if (posts.containsKey(id)) {
-      posts.remove(id);
+     return Optional.of(posts.remove(id));
     }
-    return Optional.empty();
-  }
-
 }
