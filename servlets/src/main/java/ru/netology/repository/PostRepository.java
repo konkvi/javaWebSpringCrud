@@ -17,9 +17,7 @@ public class PostRepository {
     return posts;
   }
 
-  public Optional<Post> getById(long id) {
-    return Optional.ofNullable(posts.get(id));
-  }
+  public Optional<Post> getById(long id) { return Optional.of(posts.get(id)); }
 
   public Post save(Post post) {
     long postId = post.getId();
@@ -39,6 +37,6 @@ public class PostRepository {
   }
 
   public Optional<Post> removeById(long id) {
-     return Optional.of(posts.remove(id));
-    }
+    return Optional.of(posts.remove(id));
+  }
 }

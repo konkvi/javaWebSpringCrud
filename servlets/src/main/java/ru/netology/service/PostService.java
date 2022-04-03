@@ -4,7 +4,7 @@ import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.repository.PostRepository;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
 public class PostService {
@@ -16,7 +16,7 @@ public class PostService {
 
   public ConcurrentMap<Long,Post> all() { return repository.all(); }
 
-  public Post getById(long id) { return repository.getById(id).orElseThrow(NotFoundException::new); }
+  public Optional<Post> getById(long id) { return repository.getById(id); }
 
   public Post save(Post post) { return repository.save(post); }
 

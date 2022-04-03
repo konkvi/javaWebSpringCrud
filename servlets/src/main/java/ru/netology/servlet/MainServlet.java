@@ -7,7 +7,6 @@ import ru.netology.service.PostService;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
   //выносим приватные для класса константы
@@ -40,7 +39,7 @@ public class MainServlet extends HttpServlet {
       }
 
       if (method.equals(GET) && path.matches(API_POSTS_PATH)) {
-        final long id = Long.parseLong(path.substring(path.lastIndexOf(SLASH))+1);
+        final var id = parseId(path);
         controller.getById(id, resp);
         return;
       }
@@ -51,15 +50,20 @@ public class MainServlet extends HttpServlet {
       }
 
       if (method.equals(DELETE) && path.matches(API_POSTS_PATH)) {
-        final long id = Long.parseLong(path.substring(path.lastIndexOf(SLASH)+1));
+        final var id = parseId(path);
         controller.removeById(id, resp);
         return;
       }
+
       resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
     } catch (Exception e) {
       e.printStackTrace();
       resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
+  }
+  private long parseId(String path) {
+    return Long.parseLong(path.substring(path.lastIndexOf(SLASH) + 1));
   }
 }
 
