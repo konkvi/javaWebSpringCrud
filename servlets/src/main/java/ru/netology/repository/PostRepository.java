@@ -4,7 +4,7 @@ import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import java.util.List;
 import java.util.Optional;
-import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PostRepository {
 
@@ -12,7 +12,7 @@ public class PostRepository {
   private long postId;
 
   public PostRepository() {
-    this.posts = new Vector<>();
+    this.posts = new CopyOnWriteArrayList<>();
     postId = 0;
   }
 
