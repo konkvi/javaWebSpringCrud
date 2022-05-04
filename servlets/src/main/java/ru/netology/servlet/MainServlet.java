@@ -55,7 +55,7 @@ public class MainServlet extends HttpServlet {
         return;
       }
 
-      resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
     } catch (Exception e) {
       e.printStackTrace();

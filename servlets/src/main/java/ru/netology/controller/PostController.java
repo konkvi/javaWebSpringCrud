@@ -3,12 +3,12 @@ package ru.netology.controller;
 import com.google.gson.Gson;
 import ru.netology.model.Post;
 import ru.netology.service.PostService;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
 
 public class PostController {
+
   public static final String APPLICATION_JSON = "application/json";
   private final PostService service;
   private final Gson gson;
@@ -28,6 +28,7 @@ public class PostController {
     response.setContentType(APPLICATION_JSON);
     final var data = service.getById(id);
     response.getWriter().print(gson.toJson(data));
+
   }
 
   public void save(Reader body, HttpServletResponse response) throws IOException {

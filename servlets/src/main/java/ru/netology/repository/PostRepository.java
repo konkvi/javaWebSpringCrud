@@ -1,42 +1,53 @@
 package ru.netology.repository;
 
+import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.Vector;
 
 public class PostRepository {
-  private ConcurrentMap<Long, Post> posts;
+
+  private final List<Post> posts;
+  private long postId;
 
   public PostRepository() {
-    this.posts = new ConcurrentHashMap<>();
+    this.posts = new Vector<>();
+    postId = 0;
   }
 
-  public ConcurrentMap<Long, Post> all() {
+  public List<Post> all() {
     return posts;
   }
 
-  public Optional<Post> getById(long id) { return Optional.of(posts.get(id)); }
-
-  public Post save(Post post) {
-    long postId = post.getId();
-    Post newPost = new Post(postId, post.getContent());
-    if (posts.containsKey(postId)){
-      replacePost(postId, post);
-    } else {
-      posts.put(postId, newPost);
-      postId++;
+  public Optional<Post> getById(long id) {
+    for (Post post : posts) {
+      if (id == post.getId()) {
+        return Optional.of(post);
+      }
     }
-    return newPost;
+    return Optional.empty();
   }
 
-  // если такой id уже существует
-  public void replacePost (long id, Post post) {
-    posts.replace(id, post);
+  public Post save(Post savePost) {
+    long idSavePost = savePost.getId();
+    if (idSavePost == 0) {
+      savePost.setId(++postId);
+      posts.add(savePost);
+      return savePost;
+    } else {
+      Optional<Post> newPost = getById(idSavePost);
+      if (newPost.isPresent()) {
+        Post post = newPost.get();
+        post.setContent(savePost.getContent());
+        return post;
+      } else {
+        throw new NotFoundException(String.format("Пост с ID = %d невозможно сохранить!", idSavePost));
+      }
+    }
   }
 
-  public Optional<Post> removeById(long id) {
-    return Optional.of(posts.remove(id));
+  public void removeById(long id) {
+    posts.removeIf(post -> id == post.getId());
   }
 }
